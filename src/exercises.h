@@ -38,6 +38,14 @@ static Exercise exercises[] = {
         true,
         "tests/1_hello/1_003_welcome_message2_test.c",
         "Welcome Message 2 Test Suite"
+    },
+    {
+        "exercises/1_hello/1_004_escape_runes.c",
+        "This is a \"quoted\" text\nThe file is located at C:\\Program Files\\App\n10% of the work is done\n",
+        "Fix the escape sequences in each printf statement",
+        true,
+        "tests/1_hello/1_004_escape_runes_test.c",
+        "Escape Runes Test Suite"
     }
 };
 
