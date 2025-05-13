@@ -48,6 +48,13 @@ static Exercise exercises[] = {
         true,
         "tests/1_hello/1_005_potion_recipe_test.c",
         "Potion Recipe Test Suite"
+    },
+    {
+        "exercises/1_hello/1_006_magic_variables.c",
+        "Wizard level: 42\nSpell power: 9.75\nMagic symbol: *\n",
+        true,
+        "tests/1_hello/1_006_magic_variables_test.c",
+        "Magic Variables Test Suite"
     }
 };
 

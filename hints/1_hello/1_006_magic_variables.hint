@@ -1,0 +1,6 @@
+Each variable in C needs a specific type that matches what it will store.
+
+Three common types:
+int myNumber = 42;    // Whole numbers
+float myDecimal = 9.75;  // Numbers with decimal points
+char mySymbol = '*';    // Single characters (use single quotes) 
