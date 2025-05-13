@@ -29,7 +29,6 @@ static int use_color_escapes = 0;
 static const char* progress_filename = ".progress.txt";
 
 // Function declarations
-void print_logo(void);
 int validate_exercises(const Exercise* exercises, size_t count);
 int run_exercise(const Exercise* ex, const char* work_path, const char* build_path);
 char* capture_output(const char* exe_path, int check_stdout);
@@ -43,8 +42,6 @@ int main(int argc, char** argv) {
     if (isatty(STDERR_FILENO)) {
         use_color_escapes = 1;
     }
-
-    print_logo();
 
     if (!validate_exercises(exercises, sizeof(exercises) / sizeof(Exercise))) {
         fprintf(stderr, "Exercise validation failed\n");
@@ -84,15 +81,6 @@ int main(int argc, char** argv) {
     }
 
     return 0;
-}
-
-void print_logo(void) {
-    printf(
-        "\n"
-        "    %s\"Welcome to Cventure - Let's begin the C adventure!\"%s\n"
-        "\n\n",
-        BOLD, RESET
-    );
 }
 
 int validate_exercises(const Exercise* exercises, size_t count) {
@@ -347,9 +335,6 @@ int run_exercise_test_suite(const Exercise* ex, const char* work_path, const cha
     if (!ex->test_suite) {
         return 0;  // No test suite for this exercise
     }
-
-    printf("\n%sRunning test suite: %s%s\n", BOLD, ex->test_name, RESET);
-    printf("%s━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━%s\n", BLUE, RESET);
 
     // Compile and run the test suite as a standalone executable
     char test_exe_path[MAX_PATH];

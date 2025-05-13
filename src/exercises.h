@@ -22,6 +22,22 @@ static Exercise exercises[] = {
         true,
         "tests/1_hello/1_001_hello_test.c",
         "Hello World Test Suite"
+    },
+    {
+        "exercises/1_hello/1_002_welcome_message.c",
+        "Welcome to C programming!\nLet the adventure begin!",
+        "Use multiple printf statements with newlines",
+        true,
+        "tests/1_hello/1_002_welcome_message_test.c",
+        "Welcome Message Test Suite"
+    },
+    {
+        "exercises/1_hello/1_003_welcome_message2.c",
+        "Welcome to C programming!\nLet the adventure begin!",
+        "Use a single printf statement with the newline character",
+        true,
+        "tests/1_hello/1_003_welcome_message2_test.c",
+        "Welcome Message 2 Test Suite"
     }
 };
 

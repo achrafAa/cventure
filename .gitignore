@@ -2,6 +2,7 @@
 build/
 bin/
 obj/
+temp/
 
 # Object files
 *.o
