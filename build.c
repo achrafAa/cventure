@@ -12,6 +12,7 @@
 #define MAX_PATH 256
 #define MAX_OUTPUT 4096
 #define MAX_EXERCISES 100
+#define MAX_CHAPTERS 20
 
 // ANSI color codes
 #define RED "\x1b[31m"
@@ -34,9 +35,10 @@ int run_exercise(const Exercise* ex, const char* work_path, const char* build_pa
 char* capture_output(const char* exe_path, int check_stdout);
 int compile_exercise(const Exercise* ex, const char* work_path, const char* build_path, char* exe_path);
 void print_help(const Exercise* ex, const char* work_path);
-int read_progress(int* current_progress);
-int update_progress(int exercise_number);
+int read_progress(int chapter_progress[MAX_CHAPTERS]);
+int update_progress(int chapter, int exercise_number);
 int run_exercise_test_suite(const Exercise* ex, const char* work_path, const char* build_path);
+int get_chapter_from_path(const char* path);
 
 int main(int argc, char** argv) {
     if (isatty(STDERR_FILENO)) {
@@ -49,9 +51,12 @@ int main(int argc, char** argv) {
     }
 
     int reset = 0;
+    int run_specific_chapter = -1;
     for (int i = 1; i < argc; i++) {
         if (strcmp(argv[i], "--reset") == 0) {
             reset = 1;
+        } else if (strncmp(argv[i], "--chapter=", 10) == 0) {
+            run_specific_chapter = atoi(argv[i] + 10);
         }
     }
 
@@ -63,21 +68,62 @@ int main(int argc, char** argv) {
 
     const char* work_path = "exercises";
     const char* build_path = "build";
-    int current_progress = 0;
+    int chapter_progress[MAX_CHAPTERS] = {0};
     
-    if (read_progress(&current_progress) != 0) {
+    if (read_progress(chapter_progress) != 0) {
         fprintf(stderr, "Failed to read progress file\n");
         return 1;
     }
 
-    for (size_t i = current_progress; i < sizeof(exercises) / sizeof(Exercise); i++) {
+    int all_completed = 1;
+    
+    // Process exercises by chapter
+    for (size_t i = 0; i < sizeof(exercises) / sizeof(Exercise); i++) {
+        int chapter = get_chapter_from_path(exercises[i].main_file);
+        if (chapter < 0 || chapter >= MAX_CHAPTERS) {
+            fprintf(stderr, "Invalid chapter number in exercise path: %s\n", exercises[i].main_file);
+            continue;
+        }
+        
+        // Skip if we're running a specific chapter and this isn't it
+        if (run_specific_chapter != -1 && chapter != run_specific_chapter) {
+            continue;
+        }
+        
+        // Get the exercise number within its chapter
+        int exercise_num = 0;
+        const char* last_slash = strrchr(exercises[i].main_file, '/');
+        if (last_slash) {
+            sscanf(last_slash + 1, "%*d_%d", &exercise_num);
+        }
+        
+        // Skip if already completed
+        if (exercise_num <= chapter_progress[chapter] && run_specific_chapter == -1) {
+            continue;
+        }
+        
+        all_completed = 0;
+        
         if (run_exercise(&exercises[i], work_path, build_path) != 0) {
             return 1;
         }
-        if (update_progress(i + 1) != 0) {
+        
+        if (update_progress(chapter, exercise_num) != 0) {
             fprintf(stderr, "Failed to update progress\n");
             return 1;
         }
+    }
+
+    // Display completion message when all exercises are finished
+    if (all_completed && run_specific_chapter == -1) {
+        printf("\n%s🎉 Congratulations, Code Wizard! 🎉%s\n", GREEN_BOLD, RESET);
+        printf("%s━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━%s\n", GREEN, RESET);
+        printf("\nYou've completed all available exercises in this magical journey!\n\n");
+        printf("Your mastery of C programming spells is growing stronger. \n");
+        printf("New challenges will appear in future updates, so keep your wand at the ready.\n\n");
+        printf("To practice again, use %s--reset%s to start from the beginning.\n", YELLOW, RESET);
+        printf("To focus on a specific chapter, use %s--chapter=N%s (e.g., --chapter=1).\n", YELLOW, RESET);
+        printf("\n%s━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━%s\n", GREEN, RESET);
     }
 
     return 0;
@@ -291,10 +337,15 @@ void print_help(const Exercise* ex, const char* work_path) {
     printf("%s📁 File: %s%s\n", BLUE, ex->main_file, RESET);
 }
 
-int read_progress(int* current_progress) {
+int read_progress(int chapter_progress[MAX_CHAPTERS]) {
+    // Initialize all chapter progress to 0
+    for (int i = 0; i < MAX_CHAPTERS; i++) {
+        chapter_progress[i] = 0;
+    }
+    
     FILE* progress_file = fopen(progress_filename, "r");
     if (!progress_file) {
-        *current_progress = 0;
+        // It's okay if the file doesn't exist yet
         return 0;
     }
 
@@ -303,8 +354,11 @@ int read_progress(int* current_progress) {
         return 1;
     }
 
-    if (fscanf(progress_file, "%d", current_progress) != 1) {
-        *current_progress = 0;
+    int chapter, exercise;
+    while (fscanf(progress_file, "%d %d\n", &chapter, &exercise) == 2) {
+        if (chapter >= 0 && chapter < MAX_CHAPTERS) {
+            chapter_progress[chapter] = exercise;
+        }
     }
 
     flock(fileno(progress_file), LOCK_UN);
@@ -312,7 +366,25 @@ int read_progress(int* current_progress) {
     return 0;
 }
 
-int update_progress(int exercise_number) {
+int update_progress(int chapter, int exercise_number) {
+    if (chapter < 0 || chapter >= MAX_CHAPTERS) {
+        return 1;
+    }
+    
+    // Read current progress
+    int chapter_progress[MAX_CHAPTERS];
+    if (read_progress(chapter_progress) != 0) {
+        return 1;
+    }
+    
+    // Update only if the new exercise number is higher
+    if (exercise_number <= chapter_progress[chapter]) {
+        return 0;
+    }
+    
+    chapter_progress[chapter] = exercise_number;
+    
+    // Write back all progress
     FILE* progress_file = fopen(progress_filename, "w");
     if (!progress_file) {
         return 1;
@@ -323,7 +395,11 @@ int update_progress(int exercise_number) {
         return 1;
     }
 
-    fprintf(progress_file, "%d", exercise_number);
+    for (int i = 0; i < MAX_CHAPTERS; i++) {
+        if (chapter_progress[i] > 0) {
+            fprintf(progress_file, "%d %d\n", i, chapter_progress[i]);
+        }
+    }
     
     flock(fileno(progress_file), LOCK_UN);
     fclose(progress_file);
@@ -358,4 +434,17 @@ int run_exercise_test_suite(const Exercise* ex, const char* work_path, const cha
 
     printf("%s✅ Test suite passed%s\n", GREEN_BOLD, RESET);
     return 0;
+}
+
+int get_chapter_from_path(const char* path) {
+    // Expected format: exercises/N_chaptername/N_MMM_exercisename.c
+    // Extract the first number N
+    
+    const char* exercises_dir = "exercises/";
+    if (strncmp(path, exercises_dir, strlen(exercises_dir)) != 0) {
+        return -1;
+    }
+    
+    const char* chapter_start = path + strlen(exercises_dir);
+    return atoi(chapter_start);
 } 

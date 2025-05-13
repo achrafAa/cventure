@@ -25,8 +25,15 @@ make
 
 ### Running Exercises
 - Run all exercises: `make`
+- Run exercises for a specific chapter: `make chapter=1`
 - Reset progress: `make reset`
 
+### Progress Tracking
+Cventure tracks your progress by chapter, allowing you to:
+- Complete exercises in any order
+- Skip ahead to later chapters
+- Return to earlier chapters to try new exercises
+- Continue from where you left off
 
 ### 📚 Cheatscroll
 The `cheatscroll` directory contains quick reference guides for each topic:

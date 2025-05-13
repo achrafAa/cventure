@@ -8,7 +8,8 @@ Thank you for your interest in contributing to Cventure! This document provides 
 
 1. **Structure**
    - Place new exercises in the appropriate category directory
-   - Follow the naming convention: `XXX_description.c`
+   - Follow the naming convention: `chapter_number/chapter_number_exercise_number_description.c`
+   - Example: `exercises/1_hello/1_001_hello.c`
    - Include a test file in the `tests` directory
 
 2. **Exercise Format**
@@ -25,7 +26,7 @@ Thank you for your interest in contributing to Cventure! This document provides 
    ```
 
 3. **Testing**
-   - Each exercise should have a corresponding test in `tests/category/XXX_description_test.c`
+   - Each exercise should have a corresponding test in `tests/chapter_number/chapter_number_exercise_number_description_test.c`
    - Tests should verify both success and failure cases
    - Include clear error messages
 
@@ -40,7 +41,7 @@ Thank you for your interest in contributing to Cventure! This document provides 
 
    // Default for linter only
    #ifndef __EXERCISE_FILE__
-   #define __EXERCISE_FILE__ "path/to/exercise.c"
+   #define __EXERCISE_FILE__ "exercises/chapter_number/chapter_number_exercise_number_description.c"
    #endif
 
    // Global variable to store program output
@@ -81,14 +82,20 @@ Thank you for your interest in contributing to Cventure! This document provides 
    - Update `src/exercises.h` to include the test suite path and name:
    ```c
    {
-       "exercises/category/XXX_description.c",
+       "exercises/chapter_number/chapter_number_exercise_number_description.c",
        "Expected output",
        "Hint for the exercise",
        true,
-       "tests/category/XXX_description_test.c",
+       "tests/chapter_number/chapter_number_exercise_number_description_test.c",
        "Exercise Test Suite Name"
    },
    ```
+
+3. **Chapter-based Progress System**
+   - The system tracks progress by chapter number
+   - Chapter numbers are extracted from the exercise path (e.g., `exercises/1_hello/...` is chapter 1)
+   - Exercise numbers within a chapter are extracted from the filename (e.g., `1_001_hello.c` is exercise 1)
+   - Adding new exercises to earlier chapters won't affect progress in later chapters
 
 ### Improving Existing Exercises
 
