@@ -1,0 +1,7 @@
+To display a multi-line message using a single printf() statement, use the newline 
+character "\n" within your string.
+
+This tells the console to move to a new line at that point.
+
+For example:
+printf("Line 1\nLine 2"); 

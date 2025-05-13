@@ -1,0 +1,6 @@
+To print text to the console, use the printf() function from stdio.h.
+
+The basic format is printf("Your text goes here"); where the text must be enclosed in 
+double quotes and the statement must end with a semicolon.
+
+Don't forget to include the stdio.h header at the top of your file. 

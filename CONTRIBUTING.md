@@ -11,6 +11,7 @@ Thank you for your interest in contributing to Cventure! This document provides 
    - Follow the naming convention: `chapter_number/chapter_number_exercise_number_description.c`
    - Example: `exercises/1_hello/1_001_hello.c`
    - Include a test file in the `tests` directory
+   - Create a corresponding hint file in the `hints` directory
 
 2. **Exercise Format**
    ```c
@@ -18,14 +19,17 @@ Thank you for your interest in contributing to Cventure! This document provides 
     * Exercise X: Title
     * 
     * Description of the exercise and what needs to be done
-    * 
-    * Hints:
-    * - Hint 1
-    * - Hint 2
     */
    ```
 
-3. **Testing**
+3. **Hint Format**
+   - Create a hint file at `hints/chapter_directory/exercise_name.hint`
+   - Example: `hints/1_hello/1_001_hello.hint`
+   - Hints should be clear, concise, and helpful without giving away the full solution
+   - Include examples, explanations, and common mistakes to help users understand the concept
+   - Avoid putting hints in the exercise files - keep all help content in the hint files
+
+4. **Testing**
    - Each exercise should have a corresponding test in `tests/chapter_number/chapter_number_exercise_number_description_test.c`
    - Tests should verify both success and failure cases
    - Include clear error messages
@@ -84,7 +88,6 @@ Thank you for your interest in contributing to Cventure! This document provides 
    {
        "exercises/chapter_number/chapter_number_exercise_number_description.c",
        "Expected output",
-       "Hint for the exercise",
        true,
        "tests/chapter_number/chapter_number_exercise_number_description_test.c",
        "Exercise Test Suite Name"
@@ -96,6 +99,21 @@ Thank you for your interest in contributing to Cventure! This document provides 
    - Chapter numbers are extracted from the exercise path (e.g., `exercises/1_hello/...` is chapter 1)
    - Exercise numbers within a chapter are extracted from the filename (e.g., `1_001_hello.c` is exercise 1)
    - Adding new exercises to earlier chapters won't affect progress in later chapters
+
+4. **Hint System**
+   - Hints are stored in separate files in the `hints` directory
+   - Hint files are named to match their corresponding exercise files
+   - Hints follow the path pattern: `hints/chapter_directory/exercise_name.hint`
+   - When adding a new exercise, always create a corresponding hint file
+   - Make hints comprehensive with examples and explanations
+   - The build.c file will automatically create empty hint files if they don't exist
+
+5. **Configuration System**
+   - The platform uses a `.config.json` file to store user preferences
+   - Current configuration options:
+     - `hard_mode`: Controls whether hints are displayed (true = no hints)
+   - Configuration can be set via command line flags or make targets
+   - Use the `read_config()` and `update_config()` functions to interact with the configuration
 
 ### Improving Existing Exercises
 

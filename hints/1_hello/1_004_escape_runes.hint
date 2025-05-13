@@ -1,0 +1,9 @@
+In C, special characters inside strings need to be "escaped" with a backslash.
+
+Common escape sequences include:
+\" for double quotes
+\\ for a single backslash
+\n for a new line
+\% for a percent sign
+
+Without proper escaping, the compiler will misinterpret these characters. 

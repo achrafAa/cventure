@@ -38,3 +38,6 @@ Thumbs.db
 
 # Progress tracking
 .progress.txt 
+
+# Attempts tracking
+.attempts.txt

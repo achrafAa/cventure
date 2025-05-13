@@ -10,10 +10,6 @@
  * 2. The first line should say: "Welcome to C programming!"
  * 3. The second line should say: "Let the adventure begin!"
  * 4. Make sure each message appears on its own line
- * 
- * Remember:
- * - To create a new line, use the '\n' character
- * - Without '\n', text from different printf calls will appear on the same line
  */
 
 int main() {

@@ -6,7 +6,6 @@
  * Instructions:
  * 1. Don't change the wording — only fix the escape sequences!
  * 2. Make sure your output matches the comments exactly.
- * 3. Remember: some characters need to be escaped using a backslash (\)
  */
 
 int main() {

@@ -1,0 +1,10 @@
+Format specifiers in printf() let you insert variable values into your output.
+
+Use these specifiers to match your variable types:
+%d for integers
+%f for floating-point numbers
+%.2f for floating-point with 2 decimal places
+%c for single characters
+%s for strings
+
+Example: printf("Name: %s, Age: %d", name, age); 

@@ -1,0 +1,7 @@
+To display a multi-line welcome message, use two separate printf() statements.
+
+Each printf() will output its text and then move to a new line if you include "\n" at the end of the string.
+
+For example:
+printf("Line 1\n");
+printf("Line 2\n"); 
