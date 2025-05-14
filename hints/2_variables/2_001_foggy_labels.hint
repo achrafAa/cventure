@@ -1,0 +1,22 @@
+Hint: Foggy Labels
+
+Understanding the Exercise:
+This exercise is about improving code readability by using meaningful variable names. The current code uses unclear variable names that make it hard to understand what the program is doing.
+
+Tips:
+1. Look at the printf statements to understand what each variable represents
+2. Consider what these values might represent in a magical context:
+   - A number that represents capacity
+   - A decimal number that represents regeneration
+   - A single character that represents a rank
+
+Common Pitfalls:
+- Don't change the values of the variables
+- Don't modify the printf statements
+- Don't change the data types of the variables
+
+Expected Output:
+The program should output exactly:
+Mana Capacity: 50
+Mana Regeneration: 73.2
+Rank Symbol: R 
