@@ -2,6 +2,8 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
+#include <sys/wait.h>
 
 // Default for linter only
 #ifndef __EXERCISE_FILE__
@@ -13,14 +15,22 @@ static char program_output[1024];
 
 // Function to compile and run the exercise program
 static void test_program(void) {
-    char cmd[1024];
     FILE* fp;
 
-    // Compile the exercise file
-    snprintf(cmd, sizeof(cmd), "gcc -o /tmp/test_foggy %s", __EXERCISE_FILE__);
-    if (system(cmd) != 0) {
-        strcpy(program_output, "Compilation failed");
-        return;
+    // Compile the exercise file without invoking a shell
+    {
+        char *args[] = { "gcc", "-o", "/tmp/test_foggy", __EXERCISE_FILE__, NULL };
+        pid_t pid = fork();
+        if (pid == 0) {
+            execvp("gcc", args);
+            _exit(EXIT_FAILURE);  // Only reached on execvp failure
+        }
+        int status = 0;
+        waitpid(pid, &status, 0);
+        if (!WIFEXITED(status) || WEXITSTATUS(status) != 0) {
+            strcpy(program_output, "Compilation failed");
+            return;
+        }
     }
 
     // Run the program and capture output
