@@ -65,19 +65,19 @@ static Exercise exercises[] = {
     },
     {
         "exercises/1_hello/1_007_magical_input.c",
-        "Exercise 1_007_magical_input.c requires input",  // Special output message
-        false,  // Don't check stdout since it requires input
+        "Exercise 1_007_magical_input.c requires input",
+        false,
         "tests/1_hello/1_007_magical_input_test.c",
         "Magical Input Test Suite",
-        true  // Skip output check completely
+        true 
     },
     {
         "exercises/1_hello/1_008_spell_components_input.c",
-        "Exercise 1_008_spell_components_input.c requires input",  // Special output message
-        false,  // Don't check stdout since it requires input
+        "Exercise 1_008_spell_components_input.c requires input",
+        false,
         "tests/1_hello/1_008_spell_components_input_test.c",
         "Spell Components Input Test Suite",
-        true  // Skip output check completely
+        true
     },
     {
         "exercises/1_hello/1_009_magic_calculator.c",
@@ -101,6 +101,15 @@ static Exercise exercises[] = {
         true,
         "tests/1_hello/1_011_potion_counter_test.c",
         "Potion Counter Test Suite",
+        false
+    },
+    // 2. Variables
+    {
+        "exercises/2_variables/2_001_foggy_labels.c",
+        "Mana Capacity: 50\nMana Regeneration: 73.2\nRank Symbol: R\n",
+        true,
+        "tests/2_variables/2_001_foggy_labels_test.c",
+        "Foggy Labels Test Suite",
         false
     }
 };
