@@ -161,8 +161,15 @@ int main(int argc, char** argv) {
 
 int validate_exercises(const Exercise* exercises, size_t count) {
     for (size_t i = 0; i < count; i++) {
-        if (!exercises[i].main_file || !exercises[i].output) {
-            fprintf(stderr, "Exercise %zu has missing required fields\n", i + 1);
+        // Required for all exercises
+        if (!exercises[i].main_file) {
+            fprintf(stderr, "Exercise %zu has missing main_file field\n", i + 1);
+            return 0;
+        }
+        
+        // Required for non-interactive exercises
+        if (!exercises[i].skip_output_check && !exercises[i].output) {
+            fprintf(stderr, "Exercise %zu has missing output field\n", i + 1);
             return 0;
         }
     }
@@ -188,7 +195,52 @@ int run_exercise(const Exercise* ex, const char* work_path, const char* build_pa
         return 1;
     }
 
-    // Run basic output test
+    // For interactive exercises, skip the basic output test
+    if (ex->skip_output_check) {
+        printf("%s✅ Compilation Successful!%s\n", GREEN_BOLD, RESET);
+        printf("%s━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━%s\n\n", GREEN, RESET);
+        
+        // Run test suite for validation
+        if (ex->test_suite) {
+            if (run_exercise_test_suite(ex, work_path, build_path) != 0) {
+                // Get current attempt count before incrementing
+                int attempts = get_exercise_attempts(ex->main_file);
+                
+                // Increment attempt counter
+                increment_exercise_attempts(ex->main_file);
+                
+                // Show hint if this is at least the second attempt or we're not in hard mode
+                int show_hint = (!hard_mode && attempts >= 1);
+                print_help(ex, work_path, show_hint);
+                return 1;
+            }
+        }
+        
+        // Reset attempt counter for this exercise since it passed
+        FILE* attempts_file = fopen(attempts_filename, "r");
+        if (attempts_file) {
+            // Create a temporary file for writing the updated attempts
+            FILE* temp_file = fopen(".temp_attempts.txt", "w");
+            if (temp_file) {
+                char line[MAX_PATH * 2];
+                while (fgets(line, sizeof(line), attempts_file) != NULL) {
+                    // Skip the line for the current exercise
+                    if (strstr(line, ex->main_file) == NULL) {
+                        fputs(line, temp_file);
+                    }
+                }
+                fclose(temp_file);
+                fclose(attempts_file);
+                rename(".temp_attempts.txt", attempts_filename);
+            } else {
+                fclose(attempts_file);
+            }
+        }
+        
+        return 0;
+    }
+
+    // Run basic output test for non-interactive exercises
     char* output = capture_output(exe_path, ex->check_stdout);
     if (!output) {
         // Get current attempt count before incrementing

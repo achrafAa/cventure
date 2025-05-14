@@ -1,0 +1,5 @@
+To get input from the user in C, follow these steps:
+
+1. Declare the correct type of variable to store the input (e.g., spellNumber is integer)
+3. Use scanf("%d", &variableName) to read an integer input
+   Notice the & symbol before the variable name - it's essential! 

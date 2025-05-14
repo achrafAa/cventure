@@ -1,0 +1,20 @@
+Increment/Decrement Operators:
+x++ : Use value, then add 1
+++x : Add 1, then use value
+x-- : Use value, then subtract 1
+--x : Subtract 1, then use value
+
+Steps:
+1. Initialize potion_count = 5
+2. Print initial value
+3. Use post-increment (x++)
+4. Use pre-increment (++x)
+5. Use post-decrement (x--)
+6. Use pre-decrement (--x)
+
+Expected output:
+Initial potion count: 5
+Post-increment: 5 (now 6)
+Pre-increment: 7
+Post-decrement: 7 (now 6)
+Pre-decrement: 5 

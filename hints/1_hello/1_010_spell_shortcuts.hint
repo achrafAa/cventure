@@ -1,0 +1,8 @@
+Compound assignment operators combine an arithmetic operation with assignment:
+
+x += 5;   // Same as: x = x + 5;
+x -= 3;   // Same as: x = x - 3;
+x *= 2;   // Same as: x = x * 2;
+x /= 4;   // Same as: x = x / 4;
+
+These shortcuts save typing and make your code more readable. 

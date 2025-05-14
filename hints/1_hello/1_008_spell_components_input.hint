@@ -1,0 +1,7 @@
+To read different types of input, use the matching format specifier in scanf():
+
+For integers: scanf("%d", &intVariable);
+For floats: scanf("%f", &floatVariable);
+For characters: scanf(" %c", &charVariable);
+
+Notice the space before %c - it helps skip any whitespace leftover from previous input. 

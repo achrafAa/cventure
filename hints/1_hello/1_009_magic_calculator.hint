@@ -1,0 +1,7 @@
+C uses these arithmetic operators for basic calculations:
+
++ for addition
+- for subtraction
+* for multiplication
+/ for integer division (discards any remainder)
+% for modulus (returns the remainder) 
